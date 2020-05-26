@@ -1,8 +1,6 @@
-const cors = require("cors");
-app.use(cors());
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = 4002;
 
 const User = require("./models").user;
 const TodoList = require("./models").todoList;
@@ -52,7 +50,7 @@ app.get("/users/:userId/lists", async (req, res, next) => {
   try {
     const userId = parseInt(req.params.userId);
     const user = await User.findByPk(userId, {
-      include: [TodoList],
+      include: [TodoList]
     });
     if (user) {
       res.send(user.TodoLists);
@@ -117,7 +115,7 @@ app.delete("/users/:userId/lists", async (req, res, next) => {
     if (!user) {
       res.status(404).send("User not found");
     } else {
-      user.TodoLists.forEach(async (list) => await list.destroy());
+      user.TodoLists.forEach(async list => await list.destroy());
       res.status(204).send();
     }
   } catch (e) {
